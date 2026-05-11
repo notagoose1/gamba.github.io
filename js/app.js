@@ -1,5 +1,5 @@
 // INITIALIZE SUPABASE
-const _supabase = supabase.createClient('https://bnewlzfxazyvcqdwlzzg.supabase.co', 'YOUR_ANON_KEY');
+const _supabase = supabase.createClient('https://bnewlzfxazyvcqdwlzzg.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJuZXdsemZ4YXp5dmNxZHdsenpnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg1MDkxNTIsImV4cCI6MjA5NDA4NTE1Mn0.4FqiWgVVKmKu8sZnhpVXYCH-mzW2ZYait2WDBrXp218');
 
 let balance = 1000.00;
 let currentBet = 10.00;
