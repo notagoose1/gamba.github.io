@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orbit | Virtual Casino</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <style>
+        body { background-color: #0f212e; color: #b1bad3; font-family: sans-serif; }
+        .stake-card { background-color: #1a2c38; border-radius: 8px; }
+        .stake-input { background-color: #0f212e; border: 2px solid #2f4553; color: white; }
+        .stake-button-green { background-color: #00e701; color: #000; font-weight: bold; transition: 0.2s; }
+        .stake-button-green:hover { background-color: #1fff20; transform: translateY(-1px); }
+        .game-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+        .mine-tile { background-color: #2f4553; aspect-ratio: 1; border-radius: 4px; cursor: pointer; transition: 0.1s; }
+        .mine-tile:hover { background-color: #557086; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- Top Navigation -->
+    <nav class="bg-[#1a2c38] p-4 flex justify-between items-center border-b border-[#2f4553]">
+        <div class="text-white font-bold text-xl tracking-tighter">ORBIT <span class="text-green-500">ORIGINALS</span></div>
+        <div class="flex items-center gap-4">
+            <div class="flex items-center bg-[#0f212e] rounded-md px-4 py-2 border border-[#2f4553]">
+                <span class="text-green-500 font-mono mr-2">$</span>
+                <span id="balance-display" class="text-white font-bold">1000.00</span>
+            </div>
+            <button onclick="resetBalance()" class="text-xs text-gray-400 hover:text-white underline">Reset</button>
+        </div>
+    </nav>
+
+    <div class="flex flex-1">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-[#1a2c38] p-4 hidden md:block border-r border-[#2f4553]">
+            <ul class="space-y-2">
+                <li><button onclick="switchGame('mines')" class="w-full text-left p-2 hover:bg-[#2f4553] rounded">💣 Mines</button></li>
+                <li><button onclick="switchGame('hilo')" class="w-full text-left p-2 hover:bg-[#2f4553] rounded">🃏 Hilo</button></li>
+                <li><button onclick="switchGame('dice')" class="w-full text-left p-2 hover:bg-[#2f4553] rounded">🎲 Dice</button></li>
+            </ul>
+        </aside>
+
+        <!-- Main Game Area -->
+        <main class="flex-1 p-4 md:p-8 flex justify-center">
+            <div id="game-container" class="w-full max-w-4xl grid grid-cols-1 md:grid-cols-3 gap-4">
+                
+                <!-- Left: Controls -->
+                <div class="stake-card p-4 flex flex-col gap-4">
+                    <div>
+                        <label class="text-xs font-bold mb-2 block">Bet Amount</label>
+                        <div class="relative">
+                            <input id="bet-amount" type="number" value="10.00" class="stake-input w-full p-2 rounded outline-none">
+                            <div class="absolute right-2 top-2 flex gap-1">
+                                <button onclick="adjustBet(0.5)" class="text-[10px] bg-[#2f4553] px-2 py-1 rounded">1/2</button>
+                                <button onclick="adjustBet(2)" class="text-[10px] bg-[#2f4553] px-2 py-1 rounded">2x</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="game-specific-controls">
+                        <!-- Content changes based on game -->
+                    </div>
+
+                    <button id="primary-action-btn" class="stake-button-green w-full py-4 rounded shadow-lg">Bet</button>
+                </div>
+
+                <!-- Right: Game Display -->
+                <div id="game-canvas" class="md:col-span-2 stake-card p-8 flex items-center justify-center relative min-h-[400px]">
+                    <!-- Mines/Hilo/Dice will render here -->
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts will go here -->
+    <script src="app.js"></script>
+</body>
+</html>
