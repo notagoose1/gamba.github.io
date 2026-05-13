@@ -1,0 +1,70 @@
+:root {
+    --bg: #0a0b0d;
+    --surface: #16181d;
+    --accent: #ffd700;
+    --text: #ffffff;
+}
+
+body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Segoe UI', sans-serif;
+    margin: 0;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px 50px;
+    background: var(--surface);
+    border-bottom: 2px solid #222;
+}
+
+.balance-tag {
+    background: #1a1c23;
+    padding: 8px 15px;
+    border-radius: 20px;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    font-weight: bold;
+}
+
+.casino-floor {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 30px;
+    padding: 40px;
+}
+
+.game-card {
+    background: var(--surface);
+    border-radius: 15px;
+    padding: 40px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.card-display {
+    font-size: 5rem;
+    margin: 20px 0;
+    transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.shaking {
+    animation: shake 0.1s infinite;
+}
+
+@keyframes shake {
+    0% { transform: translate(1px, 1px) rotate(0deg); }
+    50% { transform: translate(-1px, -2px) rotate(-1deg); }
+    100% { transform: translate(1px, 1px) rotate(0deg); }
+}
+
+.rank-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px;
+    background: #1a1c23;
+    margin-bottom: 5px;
+    border-radius: 5px;
+}
