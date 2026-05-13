@@ -3,78 +3,160 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Orbit | Virtual Casino</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <title>SupaBet | Simulation Gambling</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        body { background-color: #0f212e; color: #b1bad3; font-family: sans-serif; }
-        .stake-card { background-color: #1a2c38; border-radius: 8px; }
-        .stake-input { background-color: #0f212e; border: 2px solid #2f4553; color: white; }
-        .stake-button-green { background-color: #00e701; color: #000; font-weight: bold; transition: 0.2s; }
-        .stake-button-green:hover { background-color: #1fff20; transform: translateY(-1px); }
-        .game-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
-        .mine-tile { background-color: #2f4553; aspect-ratio: 1; border-radius: 4px; cursor: pointer; transition: 0.1s; }
-        .mine-tile:hover { background-color: #557086; }
+        :root { --gold: #ffd700; --bg: #121212; --card: #1e1e1e; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); color: white; display: flex; flex-direction: column; align-items: center; padding: 20px; }
+        .card { background: var(--card); padding: 2rem; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); width: 100%; max-width: 400px; text-align: center; margin-bottom: 20px; }
+        input { width: 80%; padding: 10px; margin: 10px 0; border-radius: 5px; border: none; }
+        button { background: var(--gold); color: black; border: none; padding: 12px 24px; font-weight: bold; border-radius: 5px; cursor: pointer; transition: 0.3s; width: 100%; margin: 5px 0; }
+        button:hover { opacity: 0.8; transform: translateY(-2px); }
+        .balance-display { font-size: 2rem; color: var(--gold); margin: 10px 0; }
+        table { width: 100%; max-width: 600px; border-collapse: collapse; margin-top: 20px; background: var(--card); }
+        th, td { padding: 12px; border-bottom: 1px solid #333; text-align: left; }
+        th { color: var(--gold); }
+        .hidden { display: none; }
     </style>
 </head>
-<body class="min-h-screen flex flex-col">
+<body>
 
-    <!-- Top Navigation -->
-    <nav class="bg-[#1a2c38] p-4 flex justify-between items-center border-b border-[#2f4553]">
-        <div class="text-white font-bold text-xl tracking-tighter">ORBIT <span class="text-green-500">ORIGINALS</span></div>
-        <div class="flex items-center gap-4">
-            <div class="flex items-center bg-[#0f212e] rounded-md px-4 py-2 border border-[#2f4553]">
-                <span class="text-green-500 font-mono mr-2">$</span>
-                <span id="balance-display" class="text-white font-bold">1000.00</span>
-            </div>
-            <button onclick="resetBalance()" class="text-xs text-gray-400 hover:text-white underline">Reset</button>
-        </div>
-    </nav>
+    <h1>SupaBet Casino</h1>
 
-    <div class="flex flex-1">
-        <!-- Sidebar -->
-        <aside class="w-64 bg-[#1a2c38] p-4 hidden md:block border-r border-[#2f4553]">
-            <ul class="space-y-2">
-                <li><button onclick="switchGame('mines')" class="w-full text-left p-2 hover:bg-[#2f4553] rounded">💣 Mines</button></li>
-                <li><button onclick="switchGame('hilo')" class="w-full text-left p-2 hover:bg-[#2f4553] rounded">🃏 Hilo</button></li>
-                <li><button onclick="switchGame('dice')" class="w-full text-left p-2 hover:bg-[#2f4553] rounded">🎲 Dice</button></li>
-            </ul>
-        </aside>
-
-        <!-- Main Game Area -->
-        <main class="flex-1 p-4 md:p-8 flex justify-center">
-            <div id="game-container" class="w-full max-w-4xl grid grid-cols-1 md:grid-cols-3 gap-4">
-                
-                <!-- Left: Controls -->
-                <div class="stake-card p-4 flex flex-col gap-4">
-                    <div>
-                        <label class="text-xs font-bold mb-2 block">Bet Amount</label>
-                        <div class="relative">
-                            <input id="bet-amount" type="number" value="10.00" class="stake-input w-full p-2 rounded outline-none">
-                            <div class="absolute right-2 top-2 flex gap-1">
-                                <button onclick="adjustBet(0.5)" class="text-[10px] bg-[#2f4553] px-2 py-1 rounded">1/2</button>
-                                <button onclick="adjustBet(2)" class="text-[10px] bg-[#2f4553] px-2 py-1 rounded">2x</button>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div id="game-specific-controls">
-                        <!-- Content changes based on game -->
-                    </div>
-
-                    <button id="primary-action-btn" class="stake-button-green w-full py-4 rounded shadow-lg">Bet</button>
-                </div>
-
-                <!-- Right: Game Display -->
-                <div id="game-canvas" class="md:col-span-2 stake-card p-8 flex items-center justify-center relative min-h-[400px]">
-                    <!-- Mines/Hilo/Dice will render here -->
-                </div>
-
-            </div>
-        </main>
+    <!-- Auth Section -->
+    <div id="auth-section" class="card">
+        <h3>Join the Game</h3>
+        <input type="email" id="email" placeholder="Email">
+        <input type="password" id="password" placeholder="Password">
+        <input type="text" id="username" placeholder="Username (for leaderboard)">
+        <button onclick="handleSignUp()">Sign Up</button>
+        <button onclick="handleLogin()" style="background: #444; color: white;">Login</button>
     </div>
 
-    <!-- Scripts will go here -->
-    <script src="app.js"></script>
+    <!-- Game Section -->
+    <div id="game-section" class="card hidden">
+        <h3>Welcome, <span id="display-name">User</span>!</h3>
+        <div class="balance-display">$<span id="balance-amount">0</span></div>
+        <input type="number" id="bet-amount" placeholder="Bet Amount" min="1">
+        <button onclick="playGame(2)">Double or Nothing (2x)</button>
+        <button onclick="handleLogout()" style="background: #ff4444; margin-top: 20px;">Logout</button>
+    </div>
+
+    <!-- Leaderboard Section -->
+    <h3>Global Leaderboard</h3>
+    <table>
+        <thead>
+            <tr><th>Rank</th><th>Player</th><th>Balance</th></tr>
+        </thead>
+        <tbody id="leaderboard-body"></tbody>
+    </table>
+
+    <script>
+        // --- CONFIGURATION ---
+        const SUPABASE_URL = 'https://bnewlzfxazyvcqdwlzzg.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJuZXdsemZ4YXp5dmNxZHdsenpnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg1MDkxNTIsImV4cCI6MjA5NDA4NTE1Mn0.4FqiWgVVKmKu8sZnhpVXYCH-mzW2ZYait2WDBrXp218';
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        let currentUser = null;
+
+        // --- AUTH LOGIC ---
+        async function handleSignUp() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const username = document.getElementById('username').value;
+            
+            const { data, error } = await _supabase.auth.signUp({
+                email, password, options: { data: { username } }
+            });
+
+            if (error) alert(error.message);
+            else alert("Check your email for confirmation!");
+        }
+
+        async function handleLogin() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const { data, error } = await _supabase.auth.signInWithPassword({ email, password });
+            
+            if (error) alert(error.message);
+            else checkUser();
+        }
+
+        async function handleLogout() {
+            await _supabase.auth.signOut();
+            location.reload();
+        }
+
+        async function checkUser() {
+            const { data: { user } } = await _supabase.auth.getUser();
+            if (user) {
+                currentUser = user;
+                document.getElementById('auth-section').classList.add('hidden');
+                document.getElementById('game-section').classList.remove('hidden');
+                document.getElementById('display-name').innerText = user.user_metadata.username;
+                fetchUserData();
+            }
+            updateLeaderboard();
+        }
+
+        // --- DATA LOGIC ---
+        async function fetchUserData() {
+            const { data, error } = await _supabase
+                .from('profiles')
+                .select('balance')
+                .eq('id', currentUser.id)
+                .single();
+            
+            if (data) document.getElementById('balance-amount').innerText = data.balance;
+        }
+
+        async function updateLeaderboard() {
+            const { data, error } = await _supabase
+                .from('profiles')
+                .select('username, balance')
+                .order('balance', { ascending: false })
+                .limit(10);
+
+            const tbody = document.getElementById('leaderboard-body');
+            tbody.innerHTML = data.map((u, i) => `
+                <tr>
+                    <td>${i+1}</td>
+                    <td>${u.username || 'Anon'}</td>
+                    <td>$${u.balance}</td>
+                </tr>
+            `).join('');
+        }
+
+        // --- GAME LOGIC ---
+        async function playGame(multiplier) {
+            const betInput = document.getElementById('bet-amount');
+            const bet = parseInt(betInput.value);
+            const currentBalance = parseInt(document.getElementById('balance-amount').innerText);
+
+            if (isNaN(bet) || bet <= 0 || bet > currentBalance) {
+                alert("Invalid bet amount!");
+                return;
+            }
+
+            const win = Math.random() > 0.5;
+            const newBalance = win ? currentBalance + (bet * (multiplier - 1)) : currentBalance - bet;
+
+            const { error } = await _supabase
+                .from('profiles')
+                .update({ balance: newBalance })
+                .eq('id', currentUser.id);
+
+            if (!error) {
+                alert(win ? `You WON $${bet}!` : `You LOST $${bet}!`);
+                fetchUserData();
+                updateLeaderboard();
+            } else {
+                alert("Database error. Transaction cancelled.");
+            }
+        }
+
+        // Initialize
+        checkUser();
+    </script>
 </body>
 </html>
