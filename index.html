@@ -2,59 +2,49 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>SupaCasino | Professional Gaming</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SupaCasino • Fake Money Casino</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
     <nav class="navbar">
         <div class="logo">SUPACASINO</div>
+        <div class="nav-games">
+            <button onclick="switchGame('hilo')">HiLo</button>
+            <button onclick="switchGame('roulette')">Roulette</button>
+            <button onclick="switchGame('mines')">Mines</button>
+            <button onclick="switchGame('plinko')">Plinko</button>
+            <button onclick="switchGame('blackjack')">Blackjack</button>
+        </div>
         <div class="user-hub" id="user-hub">
             <span class="xp-badge" id="user-xp">XP: 0</span>
-            <span class="balance-tag">$<span id="user-balance">0</span></span>
+            <span class="balance-tag">$<span id="user-balance">1000</span></span>
         </div>
     </nav>
 
     <main class="casino-floor">
-        <!-- Game Module: Higher or Lower -->
-        <section class="game-card" id="hl-game">
-            <h2>High / Low</h2>
-            <div class="card-display" id="card-value">?</div>
-            <div class="controls">
-                <input type="number" id="bet-amount" placeholder="Bet Amount">
-                <button onclick="playHL('high')">Higher</button>
-                <button onclick="playHL('low')">Lower</button>
-            </div>
-        </section>
+        <div id="game-container"></div>
 
-        <!-- Leaderboard Sidebar -->
         <aside class="leaderboard">
-            <h3>Global High Rollers</h3>
+            <h3>🏆 High Rollers</h3>
             <div id="leaderboard-data"></div>
         </aside>
     </main>
 
-    <script src="casino.js"></script>
+    <script src="js/casino.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/hilo.js"></script>
+    <script src="js/roulette.js"></script>
+    <script src="js/mines.js"></script>
+    <script src="js/plinko.js"></script>
+    <script src="js/blackjack.js"></script>
+
     <script>
-        async function playHL(choice) {
-            const bet = parseInt(document.getElementById('bet-amount').value);
-            const display = document.getElementById('card-value');
-            
-            // Visual "thinking" state
-            display.classList.add('shaking');
-            
-            const resultValue = Math.floor(Math.random() * 100);
-            const isHigh = resultValue > 50;
-            const win = (choice === 'high' && isHigh) || (choice === 'low' && !isHigh);
-
-            const outcome = await Casino.placeBet(bet, win, 1.9);
-
-            setTimeout(() => {
-                display.classList.remove('shaking');
-                display.innerText = resultValue;
-                display.style.color = win ? '#4caf50' : '#ff5252';
-            }, 500);
-        }
+        window.onload = () => {
+            Casino.init();
+            switchGame('hilo');
+        };
     </script>
 </body>
 </html>
